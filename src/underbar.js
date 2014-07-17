@@ -175,24 +175,42 @@ var _ = {};
   //     return total + number;
   //   }, 0); // should be 6
   _.reduce = function(collection, iterator, accumulator) {
+		accumulator = (typeof accumulator === "undefined" ? collection[0] : accumulator);
+		for (var i = 0; i < collection.length; i++) {
+			accumulator = iterator(accumulator, collection[i]);
+		}
+		return accumulator;
   };
 
   // Determine if the array or object contains a given value (using `===`).
   _.contains = function(collection, target) {
     // TIP: Many iteration problems can be most easily expressed in
     // terms of reduce(). Here's a freebie to demonstrate!
-    return _.reduce(collection, function(wasFound, item) {
-      if (wasFound) {
-        return true;
-      }
-      return item === target;
-    }, false);
+		if (Array.isArray(collection)) {
+	    return _.reduce(collection, function(wasFound, item) {
+	      if (wasFound) {
+	        return true;
+	      }
+	      return item === target;
+	    }, false);
+		} else {
+			for (var key in collection) {
+				if (collection[key] === target) {
+					return true;
+				}
+			}
+		}
   };
 
 
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
+		if (collection.length > 0) {
+			return _.reduce(collection, iterator, false);
+		} else {
+			return true;
+		}
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
