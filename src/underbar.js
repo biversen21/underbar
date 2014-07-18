@@ -53,7 +53,7 @@ var _ = {};
   // iterator function over each item in the input collection.
   _.each = function(collection, iterator) {
 		if (Array.isArray(collection)) {
-			for (i=0; i < collection.length; i++) {
+			for (var i = 0; i < collection.length; i++) {
 				iterator(collection[i], i, collection);
 			}
 		} else {
@@ -115,8 +115,9 @@ var _ = {};
   // Return the results of applying an iterator to each element.
   _.map = function(collection, iterator) {
 		var newArr = [];
+		var newVal;
 		for (var i=0; i<collection.length; i++) {
-			var newVal = iterator(collection[i]);
+			newVal = iterator(collection[i]);
 			newArr.push(newVal);
 		}
 		return newArr;
@@ -147,14 +148,15 @@ var _ = {};
   // Note: you will nead to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
 		var newArr = [];
+		var newVal;
 		if (functionOrKey instanceof Function) {
 			for (var i=0; i<collection.length; i++) {
-				var newVal = functionOrKey.apply(collection[i], [args]);
+				newVal = functionOrKey.apply(collection[i], [args]);
 				newArr.push(newVal);
 			}
 		} else {
 			for (var i=0; i<collection.length; i++) {
-				var newVal = collection[i][functionOrKey]();
+				newVal = collection[i][functionOrKey]();
 				newArr.push(newVal);
 			}
 		};
@@ -206,11 +208,10 @@ var _ = {};
   // Determine whether all of the elements match a truth test.
   _.every = function(collection, iterator) {
     // TIP: Try re-using reduce() here.
-		if (collection.length > 0) {
-			return _.reduce(collection, iterator, false);
-		} else {
-			return true;
-		}
+		iterator = iterator || function(val) {return val};
+		return _.reduce(collection, function(present, element) {
+			return !!iterator(element) && present;
+		}, true);
   };
 
   // Determine whether any of the elements pass a truth test. If no iterator is
