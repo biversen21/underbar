@@ -321,13 +321,12 @@ var _ = {};
 		
     var alreadyCalled = {func: false};
     var result;
-		console.log(func);
+
     return function() {
       if (!alreadyCalled[func]) {
         result = func.apply(this, arguments);
         alreadyCalled[func] = true;
       }
-			console.log(result);
       return result;
     };
   };
@@ -344,7 +343,7 @@ var _ = {};
 			args.push(arguments[i]);
 		};
 		if (args.length > 0) {
-			return setTimeout(function() {return func.apply(null, args);}, wait);
+			return setTimeout(function() {return func.apply(this, args);}, wait);
 		} else {
 			return setTimeout(func, wait);
 		}
@@ -362,6 +361,16 @@ var _ = {};
   // input array. For a tip on how to make a copy of an array, see:
   // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+		var newArray = [];
+		var arrayCopy = array.slice(0);
+		var index;
+		var removedVal;
+		for (var i = 0; i < array.length; i++) {
+			index = Math.floor(Math.random() * arrayCopy.length);
+			removedVal = arrayCopy.splice(index, 1);
+			newArray.push(removedVal[0]);
+		}
+		return newArray;
   };
 
 
