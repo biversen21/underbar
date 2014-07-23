@@ -457,6 +457,23 @@ var _ = {};
   // Take the difference between one array and a number of other arrays.
   // Only the elements present in just the first array will remain.
   _.difference = function(array) {
+		var result = [];
+		var present = {};
+		var present2 = {};
+		for (var i = 0; i < array.length; i++) {
+			present[array[i]] = true;
+		}
+		for (var i = 1; i < arguments.length; i++) {
+			for (var j = 0; j < arguments[i].length; j++) {
+				present2[arguments[i][j]] = true;
+			}
+		}
+		for (var key in present) {
+			if (present[key] && !present2[key]) {
+				result.push(key);
+			}
+		}
+		return result;
   };
 
 
